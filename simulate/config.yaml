@@ -1,5 +1,5 @@
 robot: "r1"  # Robot name, "go2", "b2", "b2w", "h1", "go2w", "g1", "h2", "as2"
-robot_scene: "scene.xml" # Robot scene, /unitree_robots/[robot]/scene.xml 
+robot_scene: "scene_kuka.xml"
 
 domain_id: 1  # Domain id
 interface: "lo" # Interface 
