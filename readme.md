@@ -1,3 +1,37 @@
+> [!IMPORTANT]
+> **This is a fork** of [unitreerobotics/unitree_mujoco](https://github.com/unitreerobotics/unitree_mujoco)
+> for the Unitree **R1** project (own RL policy + Meta Quest teleop). The simulator that the project
+> actually runs, with the head camera and the Quest pipeline, is the copy in
+> [mayyarx7/unitree_rl_mjlab](https://github.com/mayyarx7/unitree_rl_mjlab) (`simulate/`); see the
+> "R1 fork" section of its README. This repo holds the R1 scene and early teleop experiments.
+
+## R1 fork
+
+### What changed
+- **R1 in a KUKA cell**: [`unitree_robots/r1/scene_kuka.xml`](unitree_robots/r1/scene_kuka.xml) puts
+  `R1_C++.xml` next to a KUKA assembly ([`kuka_assembly.xml`](unitree_robots/r1/kuka_assembly.xml),
+  meshes in `unitree_robots/r1/visuals/`). The previous configs are kept as
+  `simulate/config.yaml.before_room` and `simulate/config.yaml.before_kuka`.
+- **`simulate/config.yaml`** defaults to `robot: "r1"`, `robot_scene: "scene_kuka.xml"`, `domain_id: 1`
+  and `enable_elastic_band: 1` (the robot starts hanging from the virtual band). Note that
+  `unitree_rl_mjlab`'s controller and the real robot use domain 0.
+- **`teleop/`**: a first Quest tracking prototype, not wired to the robot.
+  - `ws_udp_bridge.py` accepts WebSocket clients on port 8765 and forwards their `head`,
+    `left_hand` and `right_hand` poses as JSON over UDP to `127.0.0.1:5005` (needs `pip install websockets`).
+  - `udp_receiver.py` listens on UDP 5005 and prints what arrives.
+
+  The Quest teleop now goes through [arena-r1-kit](https://github.com/MustafaOrhon/arena-r1-kit) and
+  the controller's `sport` / `rt/arm_sdk` interfaces instead.
+
+### Run the R1 scene
+```bash
+cd simulate/build
+./unitree_mujoco            # uses simulate/config.yaml: R1 + KUKA cell, elastic band on
+./unitree_mujoco -s scene.xml   # plain R1 scene
+```
+
+---
+
 # Introduction
 ## Unitree mujoco
 `unitree_mujoco` is a simulator developed based on `Unitree sdk2` and `mujoco`. Users can easily integrate the control programs developed with `Unitree_sdk2`, `unitree_ros2`, and `unitree_sdk2_python` into this simulator, enabling a seamless transition from simulation to physical development. The repository includes two versions of the simulator implemented in C++ and Python, with a structure as follows:
